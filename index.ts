@@ -11,6 +11,11 @@ const argv = yargs
     alias: 'a',
     type: 'string'
   })
+  .option('publisher', {
+    description: 'URL of Keep API. Example: example.com',
+    alias: 'e',
+    type: 'string'
+  })
   .option('instance', {
     alias: 'i',
     description: 'Instance name',
@@ -52,7 +57,7 @@ function connect() {
   if (argv.a && argv.i && argv.u && argv.p) {
     request(options, parseResponse);
   } else {
-    console.error('Missing address, instance, username, or password');
+    console.error('Missing address, instance, username, publisher address, or password');
   }
 }
 
@@ -70,7 +75,7 @@ function parseResponse(error, response, body) {
 function MQTTConnect() {
   const MQTTOptions = 
     {
-      hostname: 'dev-events.feenicsdev.com',
+      hostname: argv.e,
       port: 443,
       path: '/mqtt',
       username: token,
@@ -79,7 +84,7 @@ function MQTTConnect() {
       keepalive: 0,
       client_id: 'mqttjs_' + Math.random().toString(16).substr(2, 8)
     }
-  const client = mqtt.connect('dev-events.feenicsdev.com', MQTTOptions);
+  const client = mqtt.connect(argv.e, MQTTOptions);
 
   client.on('connect', () => {
     client.subscribe('/' + instanceKey + '/$', (err) => {
