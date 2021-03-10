@@ -16,4 +16,4 @@ Use node to run the file index.js, while providing the necessary command line op
     --help, -h      Show help
 
 Example:
-    node index.js -a https://example.com -i exampleInstance -u exampleUsername -p examplePassword -e eventspulisher.example.com
+    node index.js -a https://example.com -i exampleInstance -u exampleUsername -p examplePassword -e eventspublisher.example.com
