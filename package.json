@@ -10,9 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@types/mqtt": "^2.5.0",
-    "@types/node": "^14.0.14",
-    "mqtt": "^4.1.0",
+    "@types/node": "^20.2.5",
+    "bson": "^4.7.2",
+    "mqtt": "^4.3.7",
     "request": "^2.88.2",
-    "yargs": "^15.4.0"
+    "yargs": "^15.4.1"
   }
 }

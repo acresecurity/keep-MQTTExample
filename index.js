@@ -1,34 +1,35 @@
 var yargs = require('yargs');
 var request = require('request');
 var mqtt = require('mqtt');
+const bson = require('bson')
 var token = '';
 var instanceKey = '';
 var argv = yargs
     .option('address', {
-    description: 'URL of Keep API. Example: https://example.com',
-    alias: 'a',
-    type: 'string'
-})
+        description: 'URL of Keep API. Example: https://example.com',
+        alias: 'a',
+        type: 'string'
+    })
     .option('publisher', {
-    description: 'URL of Keep API. Example: example.com',
-    alias: 'e',
-    type: 'string'
-})
+        description: 'URL of Keep API. Example: example.com',
+        alias: 'e',
+        type: 'string'
+    })
     .option('instance', {
-    alias: 'i',
-    description: 'Instance name',
-    type: 'string'
-})
+        alias: 'i',
+        description: 'Instance name',
+        type: 'string'
+    })
     .option('username', {
-    alias: 'u',
-    description: 'Username',
-    type: 'string'
-})
+        alias: 'u',
+        description: 'Username',
+        type: 'string'
+    })
     .option('password', {
-    alias: 'p',
-    description: 'Password',
-    type: 'string'
-})
+        alias: 'p',
+        description: 'Password',
+        type: 'string'
+    })
     .help()
     .alias('help', 'h')
     .argv;
@@ -66,6 +67,7 @@ function parseResponse(error, response, body) {
         console.error('error: ' + response.statusCode);
     }
 }
+
 function MQTTConnect() {
     var MQTTOptions = {
         hostname: argv.e,
@@ -89,7 +91,12 @@ function MQTTConnect() {
         });
     });
     client.on('message', function (topic, message) {
-        console.log('MQTT topic: ', topic, message.toString());
+        console.log('MQTT topic: ', topic);
+        console.log('MQTT message BYTE-BUFFER: ', message);
+        console.log('MQTT message SIMPLE-STRING: ', message.toString());
+        console.log('-------------------------------');
+        console.log('MQTT message BSON: ', bson.deserialize(Buffer.from(message)));
+        console.log('-------------------------------');
     });
     client.on('disconnect', function (packet) {
         console.log('MQTT disconnect: ', packet);
