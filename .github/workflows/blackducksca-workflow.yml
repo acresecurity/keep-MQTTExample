@@ -1,0 +1,55 @@
+# Quickstart: Black Duck Security Scan Action with blackducksca:
+#     https://documentation.blackduck.com/bundle/bridge/page/documentation/t_github-blackduck-quickstart.html
+name: Black Duck Security Scan
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - stage
+      - release
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+      - stage
+      - release
+  workflow_dispatch: {}
+   
+permissions:
+  contents: read
+            
+jobs:
+  blackducksca:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Black Duck Security Scan
+        id: black-duck-security-scan
+        uses: blackduck-inc/black-duck-security-scan@v2
+        with:
+          ### SCANNING: Required fields
+          blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+          ### Mark build status if policy violating issues are found
+          mark_build_status: success  # Set to success, failure, or skip
+
+
+          ### SCAN CONFIGURATION: Uncomment below to enable
+          # blackducksca_waitForScan: true # Wait for scan completion before proceeding
+
+          ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: false
+
+          ### GITHUB TOKEN: Uncomment below to enable
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Required when PR comments or sarif reports enabled
+
+          ### PULL REQUEST COMMENTS: Uncomment below to enable
+          # blackducksca_prComment_enabled: false
+
+          ### FIX PULL REQUEST CREATION: Uncomment below to enable
+          # blackducksca_fixpr_enabled: false
